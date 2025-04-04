@@ -3,3 +3,5 @@ monocle.py
 keylist.py
 keys_spec/*
 __pycache__/keylist.cpython-312.pyc
+testing/key.py
+__pycache__/key.cpython-312.pyc

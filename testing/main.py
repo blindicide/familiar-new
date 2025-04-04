@@ -3,29 +3,25 @@
 
 import requests
 import json
-import os
-import sys
+# import os # Removed, no longer needed for key import
+# import sys # Removed, no longer needed for key import
 import time # Added for potential error delay
 import shutil # Added for piper check
 import re # Import regex module
 from collections import deque
 import personality_cores
 
-# --- Allow importing from parent directory ---
-# Get the directory of the current script
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Get the parent directory
-parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
-# Add the parent directory to the Python path
-sys.path.append(parent_dir)
 
 # --- Import API Key ---
+OPENROUTER_API_KEY = None # Default to None
 try:
-    from key import OR_key as OPENROUTER_API_KEY # Import the key directly
+    # Try importing from the 'testing' directory (relative import)
+    from .key import OR_key as OPENROUTER_API_KEY
+    # print("Successfully imported API key from testing/key.py") # Optional: uncomment for confirmation
 except ImportError:
-    print("FATAL ERROR: Could not import OR_key from key.py in the parent directory.")
-    print("Ensure key.py exists in 'c:/Users/RYakunin/Documents/Projects/familiar' and contains 'OR_key = \"your_key_here\"'")
-    exit()
+    print("Warning: Could not import OR_key from testing/key.py.")
+    print("Ensure testing/key.py exists. If not, consult example_keys.py for how the file should look.")
+    # OPENROUTER_API_KEY remains None, subsequent checks will handle this
 
 # --- Local Imports (relative to this script's location) ---
 try:
@@ -111,12 +107,12 @@ commentary_prompt_generic = personality_cores.character_prompt_generic + generic
 general_prompt_generic = personality_cores.character_prompt_generic + generic_prompt
 
 ### Uncomment the one you need
-# general_prompt = general_prompt_glados
-# commentary_prompt = commentary_prompt_glados
+general_prompt = general_prompt_glados
+commentary_prompt = commentary_prompt_glados
 # general_prompt = general_prompt_yandere
 # commentary_prompt = commentary_prompt_yandere
-general_prompt = general_prompt_horny
-commentary_prompt = commentary_prompt_horny
+#general_prompt = general_prompt_horny
+# commentary_prompt = commentary_prompt_horny
 # general_prompt = general_prompt_generic
 # commentary_prompt = commentary_prompt_generic
 
@@ -436,10 +432,8 @@ def main():
 
 
 if __name__ == "__main__":
-    # Basic checks before starting (API key check is now done via imported key)
-    if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "sk-or-v1-abc...": # Check placeholder
-         print("ERROR: OpenRouter API Key not configured correctly in parent directory's key.py.")
-         exit(1)
+    # Basic checks before starting
+    # Removed the fatal exit check for API key here, warnings are handled during import and usage.
 
     # Check Piper config placeholders if TTS is enabled
     if TTS_ENABLED:
